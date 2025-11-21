@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.optim.lr_scheduler import StepLR
 import os
 import time
 from model import get_model
@@ -105,8 +104,8 @@ def train_model(data_dir='data', num_epochs=30, batch_size=32, learning_rate=0.0
     
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-4)
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.5)
+    # AdamW usually performs best with weight_decay around 0.01
+    optimizer = optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.01)
     
     # Training history
     train_losses = []
@@ -133,9 +132,6 @@ def train_model(data_dir='data', num_epochs=30, batch_size=32, learning_rate=0.0
         # Validate
         valid_loss, valid_acc = validate(model, valid_loader, criterion, device)
         
-        # Update learning rate; have to update because using StepLR
-        scheduler.step()
-        
         # Save history
         train_losses.append(train_loss)
         train_accs.append(train_acc)
@@ -160,7 +156,7 @@ def train_model(data_dir='data', num_epochs=30, batch_size=32, learning_rate=0.0
         print(f"Epoch [{epoch+1}/{num_epochs}] ({epoch_time:.2f}s)")
         print(f"  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
         print(f"  Valid Loss: {valid_loss:.4f}, Valid Acc: {valid_acc:.2f}%")
-        print(f"  LR: {scheduler.get_last_lr()[0]:.6f}")
+        print(f"  LR: {learning_rate:.6f}")
         print()
     
     total_time = time.time() - start_time
