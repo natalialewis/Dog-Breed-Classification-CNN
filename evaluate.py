@@ -5,6 +5,7 @@ from model import get_model
 from data_loader import get_data_loaders
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
+from visualize import plot_confusion_matrix
 
 
 def evaluate_model(model_path, data_dir='data', batch_size=32, device=None,split='test'):
@@ -98,6 +99,11 @@ def evaluate_model(model_path, data_dir='data', batch_size=32, device=None,split
             print(f"{cm[i, j]:<12}", end="")
         print()
     
+    # Plot the confusion matrix
+    plot_save_path = f'confusion_matrix_{split}.png'
+    plot_confusion_matrix(cm, breed_names, save_path=plot_save_path)
+    print(f"\nVisual Confusion Matrix saved to {plot_save_path}")
+
     # Per-class accuracy
     print("\nPer-Class Accuracy:")
     print("--------------------------------------------------")
@@ -109,11 +115,9 @@ def evaluate_model(model_path, data_dir='data', batch_size=32, device=None,split
     
     return accuracy, avg_loss, all_preds, all_labels, breed_names
 
-
 if __name__ == '__main__':
     # Evaluate the best model
-    # model_path = 'models/dog_breed_cnn_best.pth'
-    model_path = 'models/fake_model.pth'
+    model_path = 'models/dog_breed_cnn_best.pth'
     
     # Error handling if model file does not exist (it should though)
     if not os.path.exists(model_path):
