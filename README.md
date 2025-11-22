@@ -77,10 +77,10 @@ You can modify the training parameters in `train.py`:
 ```python
 config = {
     'data_dir': 'data',
-    'num_epochs': 30,        # Number of training epochs
-    'batch_size': 32,        # Batch size
-    'learning_rate': 0.001,  # Initial learning rate
-    'save_dir': 'models',    # Directory to save models
+    'num_epochs': 30,           # Number of training epochs
+    'batch_size': 32,           # Batch size
+    'learning_rate': 0.000089,  # Learning rate
+    'save_dir': 'models',       # Directory to save models
     'model_name': 'dog_breed_cnn'
 }
 ```
@@ -112,20 +112,21 @@ evaluate_model(model_path, split='valid')
 ## Model Architecture
 
 The CNN consists of:
-- **4 Convolutional Blocks**: Each with Conv2d → BatchNorm → ReLU → MaxPool
+- **5 Convolutional Blocks**: Each with Conv2d → BatchNorm → ReLU → MaxPool
   - Block 1: 3 → 32 channels
   - Block 2: 32 → 64 channels
   - Block 3: 64 → 128 channels
   - Block 4: 128 → 256 channels
-- **3 Fully Connected Layers**: 256×14×14 → 512 → 256 → 9 (num_classes)
+  - Block 5: 256 → 512 channels
+- **3 Fully Connected Layers**: (512×7×7 = 25,088 inputs) → 1024 → 9 (num_classes)
 - **Dropout**: 0.5 dropout rate for regularization
 - **Input Size**: 224×224 RGB images
 
 ## Training Details
 
 - **Loss Function**: CrossEntropyLoss
-- **Optimizer**: Adam with weight decay (1e-4)
-- **Learning Rate**: Starts at 0.001, reduced by 50% every 10 epochs
+- **Optimizer**: AdamW (Decoupled Weight Decay) with weight decay of 0.01
+- **Learning Rate**: Stays at a constant 0.000089 throughout training (this value can be modified but is still constant)
 - **Data Augmentation**: Random horizontal flips, rotations, and color jitter (training only)
 - **Normalization**: ImageNet mean/std normalization
 
