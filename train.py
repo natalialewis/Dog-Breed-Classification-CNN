@@ -184,7 +184,7 @@ if __name__ == '__main__':
         'data_dir': 'data',
         'num_epochs': 30,
         'batch_size': 32,
-        'learning_rate': 0.001,
+        'learning_rate': 0.0000089,
         'save_dir': 'models',
         'model_name': 'dog_breed_cnn'
     }
