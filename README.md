@@ -137,8 +137,15 @@ After training, you should see:
 - Model checkpoints saved in the `models/` directory
 - Detailed evaluation metrics including per-class accuracy
 
-## Hardware Requirements
+## Evaluating Results
+After training, run `evaluate.py` to see the model's performance on the test set. You will get:
+- Overall accuracy
+- Precision, Recall, F1-Score for each breed
+- Confusion matrix (both printed and saved as a PNG)
 
+Remember that the accuracy will vary because the test and validation sets are different.
+
+## Hardware Requirements
 - **GPU**: Any CUDA-compatible GPU is recommended (code will run on CPU but much slower)
 - **RAM**: 8GB+ recommended
 
